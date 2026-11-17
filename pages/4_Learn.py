@@ -20,7 +20,10 @@ st.markdown(
     "options by simulating thousands of possible futures with **Monte Carlo simulation**."
 )
 
-tab1, tab2, tab3, tab4 = st.tabs("🧩 Key Ideas", "🔁 Workflow", "🧮 Model Architecture", "❓ FAQ")
+# Streamlit's tabs API expects one sequence of labels, not positional labels.
+tab1, tab2, tab3, tab4 = st.tabs([
+    "🧩 Key Ideas", "🔁 Workflow", "🧮 Model Architecture", "❓ FAQ"
+])
 
 with tab1:
     st.markdown(
@@ -106,6 +109,6 @@ with tab4:
          "Each run uses random draws; rerunning with more paths (or a different seed) moves prices "
          "by a few cents. That is why results are quoted to the nearest cent with 100k+ paths."),
     ]
-    for q, a in faqs:
-        with st.expander(q):
-            st.write(a)
+    for question, answer in faqs:
+        with st.expander(question):
+            st.write(answer)

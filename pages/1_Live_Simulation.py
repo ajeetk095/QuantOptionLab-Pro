@@ -47,9 +47,10 @@ with st.sidebar:
     mu_j = st.number_input("Jump mean µ", -2.0, 0.0, -0.5, 0.05)
     sigma_j = st.number_input("Jump volatility δ", 0.0, 1.0, 0.22, 0.01)
 
-tab_sim, tab_payoff, tab_strikes = st.tabs(
+# Streamlit's tabs API expects one sequence of labels, not positional labels.
+tab_sim, tab_payoff, tab_strikes = st.tabs([
     "🎯 Option Prices & Greeks", "📐 Payoff & Simulation", "📈 Multi-Strike Sweep"
-)
+])
 
 # --------------------------- option pricing ---------------------------------
 with tab_sim:
@@ -111,7 +112,6 @@ with tab_sim:
 # --------------------------- payoff / paths ---------------------------------
 with tab_payoff:
     from utils.pricing import heston_mc_paths, merton_mc_paths
-    from utils.pricing import SIGMA_DEFAULT, V0_Heston, KAPPA_Heston, THETA_Heston, SIGMA_V_Heston, MU_J_Merton, SIGMA_J_Merton
 
     st.subheader("Simulated terminal prices & payoff profile")
     S_h, _ = heston_mc_paths(S0, v0, kappa, theta, sigma, rho, T, min(n_sims, 20_000),

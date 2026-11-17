@@ -4,11 +4,9 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-import plotly.express as px
 
 from utils.pricing import (
     heston_price, merton_price, heston_greeks, merton_greeks,
-    V0_Heston, KAPPA_Heston, THETA_Heston, SIGMA_V_Heston,
     MU_J_Merton, SIGMA_J_Merton,
 )
 from utils.theme import apply_theme, render_badge_bar
@@ -33,9 +31,10 @@ with st.sidebar:
     n_sims = 10_000
     seed = 42
 
-tab1, tab2, tab3, tab4 = st.tabs(
+# Streamlit's tabs API expects one sequence of labels, not positional labels.
+tab1, tab2, tab3, tab4 = st.tabs([
     "🎯 Parameter Sensitivity", "Γ Greeks vs Spot", "🔗 Correlation Impact", "🧪 What-If Scenarios"
-)
+])
 
 # --------------------------- tornado sensitivity ----------------------------
 with tab1:
@@ -46,8 +45,6 @@ with tab1:
 
     base_call = merton_price(S0, K, r, T, lamb, "call", sigma, MU_J_Merton,
                              SIGMA_J_Merton, n_sims, seed)
-    base_put = merton_price(S0, K, r, T, lamb, "put", sigma, MU_J_Merton,
-                            SIGMA_J_Merton, n_sims, seed)
 
     factors = {
         "Spot S₀": (S0, lambda v: merton_price(v, K, r, T, lamb, "call", sigma, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)),
@@ -121,8 +118,8 @@ with tab3:
     rhos = np.round(np.linspace(-0.90, -0.10, 9), 2)
     calls, puts = [], []
     for rr in rhos:
-        calls.append(heston_price(S0, K, r, T, rr, "call", n_paths=n_sims, seed=seed))
-        puts.append(heston_price(S0, K, r, T, rr, "put", n_paths=n_sims, seed=seed))
+        calls.append(heston_price(S0, K, r, T, rr, "call", num_paths=n_sims, seed=seed))
+        puts.append(heston_price(S0, K, r, T, rr, "put", num_paths=n_sims, seed=seed))
     df_rho = pd.DataFrame({"ρ": rhos, "Call price ($)": calls, "Put price ($)": puts})
     st.dataframe(df_rho.round(2), use_container_width=True)
 
@@ -150,17 +147,17 @@ with tab4:
     base = merton_price(S0, K, r, T, lamb, "call", sigma, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
     st.metric("Base Merton call", f"${base:,.2f}")
     table = []
-    for s in scenarios:
-        if s.startswith("Bear"):
-            v = merton_price(S0, K, r, T, lamb * 2, "call", sigma, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
-        elif s.startswith("Vol"):
-            v = merton_price(S0, K, r, T, lamb, "call", sigma * 1.5, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
-        elif s.startswith("Crash"):
-            v = merton_price(S0, K, r, T, lamb, "call", sigma, -1.0, SIGMA_J_Merton, n_sims, seed)
+    for scenario in scenarios:
+        if scenario.startswith("Bear"):
+            value = merton_price(S0, K, r, T, lamb * 2, "call", sigma, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
+        elif scenario.startswith("Vol"):
+            value = merton_price(S0, K, r, T, lamb, "call", sigma * 1.5, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
+        elif scenario.startswith("Crash"):
+            value = merton_price(S0, K, r, T, lamb, "call", sigma, -1.0, SIGMA_J_Merton, n_sims, seed)
         else:
-            v = merton_price(S0, K, r, T, lamb * 0.3, "call", sigma * 0.7, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
-        table.append({"Scenario": s, "Call price ($)": round(v, 2),
-                      "Δ vs base ($)": round(v - base, 2)})
+            value = merton_price(S0, K, r, T, lamb * 0.3, "call", sigma * 0.7, MU_J_Merton, SIGMA_J_Merton, n_sims, seed)
+        table.append({"Scenario": scenario, "Call price ($)": round(value, 2),
+                      "Δ vs base ($)": round(value - base, 2)})
     if table:
         st.dataframe(pd.DataFrame(table), use_container_width=True)
         st.markdown('<div class="section-note">Recommendation logic mirrors the research report: '

@@ -9,7 +9,10 @@ apply_theme()
 render_badge_bar()
 st.title("📚 Documentation")
 
-tab1, tab2, tab3, tab4 = st.tabs("🚀 Installation & Usage", "📁 Project Structure", "☁️ Deployment", "❓ FAQ & Troubleshooting")
+# Streamlit's tabs API expects one sequence of labels, not positional labels.
+tab1, tab2, tab3, tab4 = st.tabs([
+    "🚀 Installation & Usage", "📁 Project Structure", "☁️ Deployment", "❓ FAQ & Troubleshooting"
+])
 
 with tab1:
     st.markdown("### Installation")
@@ -45,10 +48,10 @@ with tab2:
 │   ├── 2_AI_Explainability.py# 🔍 Sensitivity & scenario testing
 │   ├── 3_Real_Time_Data.py   # 📡 Live market data + demo fallback
 │   ├── 4_Learn.py            # 🎓 Educational section
-│   ├── 5_AI_Assistant.py     # 🤖 Rule-based Q&A assistant
+│   ├── 5_AI_Assistant.py    # 🤖 Rule-based Q&A assistant
 │   ├── 6_Research_Report.py  # 📄 Embedded report + downloads
-│   ├── 7_Presentation.py     # 🎞️ 15-slide deck viewer
-│   ├── 8_About_Developer.py  # 👨‍💻 Profile & journey
+│   ├── 7_Presentation.py    # 🎞️ 15-slide deck viewer
+│   ├── 8_About_Developer.py # 👨‍💻 Profile & journey
 │   ├── 9_Contact.py          # ✉️ Validated contact form
 │   └── 10_Documentation.py   # 📚 This page
 ├── utils/

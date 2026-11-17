@@ -4,6 +4,16 @@ import streamlit as st
 
 from utils.theme import apply_theme, render_badge_bar
 
+SUMMARY_MD = """OptionLab Pro — Research Summary
+
+Study: Beyond Black-Scholes — Heston stochastic volatility & Merton jump-diffusion
+option pricing via Monte Carlo (MScFE 620 GWP#2, Group 9450).
+
+Key results: Heston ATM call/put $3.46/$2.38 (rho=-0.30) and $3.49/$2.39 (rho=-0.70);
+Merton ATM call/put $5.10/$9.52 (lambda=0.75) and $5.74/$6.52 (lambda=0.25);
+put-call parity holds in all cases (gaps ~$0.02); up-and-in call $2.56 vs $4.19
+vanilla (-39%); down-and-in put $3.52 vs $9.52 vanilla."""
+
 st.set_page_config(page_title="Research Report — OptionLab Pro", page_icon="📄", layout="wide")
 apply_theme()
 render_badge_bar()
@@ -20,7 +30,8 @@ with col1:
     except FileNotFoundError:
         st.info("Report PDF not bundled — see the project zip /reports folder.")
 with col2:
-    st.download_button("⬇️ Download summary (Markdown)", st.session_state.get("summary_md", SUMMARY_MD).encode(),
+    summary_md = st.session_state.get("summary_md", SUMMARY_MD)
+    st.download_button("⬇️ Download summary (Markdown)", summary_md.encode("utf-8"),
                        "report_summary.md", "text/markdown", use_container_width=True)
 
 st.subheader("Executive Summary")
@@ -33,7 +44,7 @@ st.markdown(
     "and priced barrier options (up-and-in call, down-and-in put)."
 )
 
-tab_results, tab_concl, tab_reco = st.tabs("📊 Key Results", "🧾 Conclusions", "✅ Recommendations")
+tab_results, tab_concl, tab_reco = st.tabs(["📊 Key Results", "🧾 Conclusions", "✅ Recommendations"])
 
 with tab_results:
     st.markdown(
@@ -92,13 +103,3 @@ st.markdown(
     "- Merton, Robert C. \"Option Pricing When Underlying Stock Returns Are Discontinuous.\" *J. of Financial Economics* 3.1–2 (1976): 125–144.\n"
     "- Wilmott, Paul. *Paul Wilmott on Quantitative Finance*. 2nd ed., Wiley, 2006."
 )
-
-SUMMARY_MD = """OptionLab Pro — Research Summary
-
-Study: Beyond Black-Scholes — Heston stochastic volatility & Merton jump-diffusion
-option pricing via Monte Carlo (MScFE 620 GWP#2, Group 9450).
-
-Key results: Heston ATM call/put $3.46/$2.38 (rho=-0.30) and $3.49/$2.39 (rho=-0.70);
-Merton ATM call/put $5.10/$9.52 (lambda=0.75) and $5.74/$6.52 (lambda=0.25);
-put-call parity holds in all cases (gaps ~$0.02); up-and-in call $2.56 vs $4.19
-vanilla (-39%); down-and-in put $3.52 vs $9.52 vanilla."""
