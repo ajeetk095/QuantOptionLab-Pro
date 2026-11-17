@@ -1,7 +1,6 @@
 """👨‍💻 About Developer — professional profile, journey timeline."""
 
 import streamlit as st
-
 from utils.theme import apply_theme, render_badge_bar
 
 st.set_page_config(page_title="About Developer — OptionLab Pro", page_icon="👨‍💻", layout="wide")
@@ -9,71 +8,112 @@ apply_theme()
 render_badge_bar()
 st.title("👨‍💻 About the Developer")
 
+LINKEDIN = "https://www.linkedin.com/in/ajeek095/"
+GITHUB   = "https://github.com/ajeetk095"
+PHOTO    = "https://media.licdn.com/dms/image/v2/D5603AQHv97cmwfVvxQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1692917722661?e=1796256000&v=beta&t=rtYuIUh4p9Oh01mJNFIYKD-86EL0vjqA3UoFGVO640E"
+
 c1, c2 = st.columns([1, 2])
 with c1:
-    st.markdown("""<div class="info-card" style="text-align:center">
-      <div style="font-size:4rem">🧑‍💼</div>
+    st.markdown(f"""<div class="info-card" style="text-align:center">
+      <img src="{PHOTO}" style="width:140px;height:140px;border-radius:50%;object-fit:cover;
+           border:3px solid var(--accent);margin-bottom:.6rem">
       <h3>Ajeet Kumar</h3>
       <div class="section-note">Quantitative Finance Professional<br>Bangalore, India</div>
       </div>""", unsafe_allow_html=True)
     st.markdown(
         "[![Email](https://img.shields.io/badge/Email-ajeetk095%40gmail.com-red)]"
         "(mailto:ajeetk095@gmail.com)\n"
-        "[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-0A66C2)]"
-        "(https://www.linkedin.com/)  <!-- TODO: add LinkedIn URL -->\n"
-        "[![GitHub](https://img.shields.io/badge/GitHub-Profile-181717)]"
-        "(https://github.com/)  <!-- TODO: add GitHub URL -->"
+        f"[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2)]({LINKEDIN})\n"
+        f"[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717)]({GITHUB})"
     )
 with c2:
     st.markdown(
-        "Hi, I'm **Ajeet Kumar**, a quantitative finance aspiring professional based in Bangalore, "
-        "India. I hold a **B.Tech in Information Technology** from Dr. A.P.J. Abdul Kalam Technical "
-        "University and an **M.Tech in Computer Science and Engineering** from Netaji Subhas "
-        "University of Technology, New Delhi (CGPA 7.92). I recently graduated from **WorldQuant "
-        "University** with an **M.Sc. in Financial Engineering, scoring 88%**.\n\n"
-        "My work sits at the intersection of technology and finance. I'm skilled in **Python, C++ "
-        "and SQL**, and I've spent the last few years applying quantitative methods — **Markowitz "
-        "MVO, Black-Litterman, Monte Carlo Simulation** — alongside machine learning techniques "
-        "like **Random Forest and deep learning** to real problems.\n\n"
-        "I've put this into practice through projects in portfolio optimization, Fama-French factor "
-        "analysis and covariance denoising, and through internships at **Amul GCMMF** and "
-        "**Algo8.ai**, where I built AI-driven defect detection systems using computer vision. "
-        "I won **1st Place at the Algo8 ML Hackathon at IIT Kanpur** and was **felicitated by the "
+        "Hi, I'm **Ajeet Kumar** — a quantitative finance professional based in Bangalore. I hold a "
+        "**B.Tech in IT** (AKTU), an **M.Tech in CSE** (NSUT Delhi, CGPA 7.92), and an **M.Sc. in "
+        "Financial Engineering** from **WorldQuant University** (88%).\n\n"
+        "I work at the intersection of tech and finance — **Python, C++, SQL** — applying "
+        "**Markowitz MVO, Black-Litterman, Monte Carlo** and ML (**Random Forest, deep learning**) "
+        "to real problems. Projects span portfolio optimization, Fama-French factor analysis and "
+        "covariance denoising; internships at **Amul GCMMF** and **Algo8.ai** (AI defect detection "
+        "via computer vision). **1st Place — Algo8 ML Hackathon, IIT Kanpur**; **felicitated by the "
         "President of India** for academic excellence.\n\n"
-        "I'm now looking to bring this mix of finance and engineering skill to a full-time role in "
-        "**quantitative research or financial engineering**."
+        "Now seeking a full-time role in **quantitative research or financial engineering**."
     )
 
 st.divider()
 st.subheader("🛠️ Skills")
-sc = st.columns(5)
-skills = [
-    ("AI / ML", "🤖"), ("Data Science", "📊"), ("Computer Vision", "👁️"),
-    ("Reinforcement Learning", "🎮"), ("Portfolio Optimization", "📈"),
-]
-for (name, icon), col in zip(skills, sc):
-    col.markdown(f"""<div class="kpi-card"><div style="font-size:1.6rem">{icon}</div>
-    <div class="kpi-label">{name}</div></div>""", unsafe_allow_html=True)
-sc2 = st.columns(2)
-for (name, icon), col in zip([("Python", "🐍"), ("SQL", "🗄️")], sc2):
-    col.markdown(f"""<div class="kpi-card"><div style="font-size:1.6rem">{icon}</div>
-    <div class="kpi-label">{name}</div></div>""", unsafe_allow_html=True)
+
+skills = {
+    "Languages": [
+        ("Python", "python", "3776AB"),
+        ("C++", "cplusplus", "00599C"),
+        ("SQL", "mysql", "4479A1"),
+    ],
+    "Libraries & Frameworks": [
+        ("NumPy", "numpy", "013243"),
+        ("pandas", "pandas", "150458"),
+        ("scikit-learn", "scikitlearn", "F7931E"),
+        ("SciPy", "scipy", "8CAAE6"),
+        ("CVXPY", "python", "3776AB"),
+        ("statsmodels", "python", "3776AB"),
+        ("OpenCV", "opencv", "5C3EE8"),
+        ("FastAPI", "fastapi", "009688"),
+    ],
+    "Quant & Portfolio Methods": [
+        ("Markowitz MVO", "chartdotjs", "FF6384"),
+        ("Black-Litterman", "chartdotjs", "FF6384"),
+        ("Kelly Criterion", "chartdotjs", "FF6384"),
+        ("Fama-French 5-Factor", "chartdotjs", "FF6384"),
+        ("Ledoit-Wolf", "chartdotjs", "FF6384"),
+        ("CVaR", "chartdotjs", "FF6384"),
+        ("Monte Carlo", "chartdotjs", "FF6384"),
+    ],
+    "Machine Learning": [
+        ("Random Forest", "scikitlearn", "F7931E"),
+        ("PCA", "scikitlearn", "F7931E"),
+        ("Reinforcement Learning", "openaigym", "0081A5"),
+        ("Supervised Classification", "scikitlearn", "F7931E"),
+    ],
+    "Generative AI & LLMs": [
+        ("LLMs", "openai", "412991"),
+        ("Prompt Engineering", "openai", "412991"),
+        ("RAG", "langchain", "1C3C3C"),
+        ("LangChain", "langchain", "1C3C3C"),
+        ("FAISS", "meta", "0467DF"),
+        ("Chroma", "databricks", "FF3621"),
+        ("HF Transformers", "huggingface", "FFD21E"),
+        ("LoRA / Fine-Tuning", "huggingface", "FFD21E"),
+    ],
+    "Tools & Platforms": [
+        ("MySQL", "mysql", "4479A1"),
+        ("Excel", "microsoftexcel", "217346"),
+        ("Tableau", "tableau", "E97627"),
+        ("Git", "git", "F05032"),
+        ("Windows", "windows", "0078D6"),
+        ("Linux", "linux", "FCC624"),
+    ],
+}
+
+for category, items in skills.items():
+    st.markdown(f"**{category}**")
+    cols = st.columns(4)
+    for i, (name, slug, color) in enumerate(items):
+        cols[i % 4].markdown(
+            f'<img src="https://img.shields.io/badge/{name.replace(" ", "%20")}-{color}'
+            f'?style=for-the-badge&logo={slug}&logoColor=white" alt="{name}">',
+            unsafe_allow_html=True,
+        )
+    st.markdown("<div style='margin-bottom:.8rem'></div>", unsafe_allow_html=True)
 
 st.divider()
 st.subheader("🧭 Developer Journey")
 journey = [
-    ("💡 Idea Generation", "Noticed that constant-volatility models misprice tail risk — wanted to "
-                           "demonstrate the difference with real simulation."),
-    ("📚 Research", "Studied Heston (1993) and Merton (1976), volatility surfaces (Gatheral 2006) "
-                    "and jump processes (Cont & Tankov 2004)."),
-    ("🧮 Model Development", "Implemented Heston Euler simulation, Merton compound-Poisson MC, "
-                             "finite-difference Greeks, binomial American pricer and barrier logic."),
-    ("🧪 Testing", "Validated with put–call parity (gaps ≈ $0.02), reproducibility seeds and "
-                   "benchmark comparisons across 7 strikes."),
-    ("🚀 Deployment", "Refactored the research notebook into this production Streamlit platform — "
-                      "live simulation, explainability dashboard and educational content."),
-    ("🔮 Future Vision", "Parameter calibration to live markets, LSM American pricing under "
-                         "stochastic volatility, deep hedging with reinforcement learning."),
+    ("💡 Idea Generation", "Constant-volatility models misprice tail risk — proved it with real simulation."),
+    ("📚 Research", "Heston (1993), Merton (1976), volatility surfaces (Gatheral 2006), jumps (Cont & Tankov 2004)."),
+    ("🧮 Model Development", "Heston Euler MC, Merton compound-Poisson, FD Greeks, binomial American pricer, barriers."),
+    ("🧪 Testing", "Put–call parity (gaps ≈ $0.02), reproducible seeds, benchmarks across 7 strikes."),
+    ("🚀 Deployment", "Research notebook → production Streamlit: live simulation, explainability, education."),
+    ("🔮 Future Vision", "Live calibration, LSM American pricing under stochastic vol, deep hedging with RL."),
 ]
 for title, body in journey:
     st.markdown(f"""<div class="info-card" style="margin-bottom:.6rem"><b>{title}</b><br>
