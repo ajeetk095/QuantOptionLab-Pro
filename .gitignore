@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Data / build artifacts
+*.pyc
+.DS_Store
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# pytest
+.pytest_cache/
