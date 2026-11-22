@@ -1,6 +1,9 @@
 """👨‍💻 About Developer & Contact — profile and quick-connect form."""
 
+import logging
 import re
+import smtplib
+from email.message import EmailMessage
 
 import streamlit as st
 
@@ -50,7 +53,7 @@ with contact_col:
     st.subheader("Contact")
     st.caption("Send a message about opportunities, research collaborations or feedback.")
 
-    with st.form("contact_form", clear_on_submit=True):
+    with st.form("contact_form"):
         name = st.text_input("Name")
         email = st.text_input("Email")
         subject = st.text_input("Subject")
@@ -61,10 +64,14 @@ with contact_col:
         errors = []
         if len(name.strip()) < 2:
             errors.append("Please enter your name (min. 2 characters).")
+        if "\r" in name or "\n" in name:
+            errors.append("Name cannot contain line breaks.")
         if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email or ""):
             errors.append("Please enter a valid email address.")
         if len(subject.strip()) < 3:
             errors.append("Subject must be at least 3 characters.")
+        if "\r" in subject or "\n" in subject:
+            errors.append("Subject cannot contain line breaks.")
         if len(message.strip()) < 10:
             errors.append("Message must be at least 10 characters.")
 
@@ -72,11 +79,41 @@ with contact_col:
             for error in errors:
                 st.error(error)
         else:
-            st.success(
-                f"✅ Thanks, {name}! Your message was validated locally.\n\n"
-                "This demo does not send email directly — please also reach me at "
-                "**ajeetk095@gmail.com**."
-            )
+            try:
+                email_settings = st.secrets.get("email", {})
+                smtp_host = email_settings.get("smtp_host", "smtp.gmail.com")
+                smtp_port = int(email_settings.get("smtp_port", 465))
+                smtp_username = email_settings.get("username", "")
+                smtp_password = email_settings.get("password", "")
+                to_address = email_settings.get("to_address", "ajeetk095@gmail.com")
+
+                if not smtp_username or not smtp_password:
+                    raise RuntimeError("Contact email credentials are not configured.")
+
+                mail = EmailMessage()
+                mail["From"] = smtp_username
+                mail["To"] = to_address
+                mail["Reply-To"] = email.strip()
+                mail["Subject"] = subject.strip()
+                mail.set_content(
+                    f"New contact form message\n\n"
+                    f"Name: {name.strip()}\n"
+                    f"Email: {email.strip()}\n"
+                    f"Subject: {subject.strip()}\n\n"
+                    f"Message:\n{message.strip()}"
+                )
+
+                with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=20) as smtp:
+                    smtp.login(smtp_username, smtp_password)
+                    smtp.send_message(mail)
+
+                st.success("✅ Your message was sent successfully. Thank you!")
+            except Exception:
+                logging.exception("Failed to send contact form email")
+                st.error(
+                    "We couldn't send your message right now. Please try again later or email "
+                    "ajeetk095@gmail.com directly."
+                )
 
     st.markdown(
         """<div class="section-note">Typical response time: within 24–48 hours. Please include the
