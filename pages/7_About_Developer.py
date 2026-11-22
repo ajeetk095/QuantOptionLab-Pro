@@ -53,6 +53,7 @@ with contact_col:
     with st.form("contact_form", clear_on_submit=True):
         name = st.text_input("Name")
         email = st.text_input("Email")
+        subject = st.text_input("Subject")
         message = st.text_area("Message", height=180)
         submitted = st.form_submit_button("Send Message", use_container_width=True)
 
@@ -62,6 +63,8 @@ with contact_col:
             errors.append("Please enter your name (min. 2 characters).")
         if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email or ""):
             errors.append("Please enter a valid email address.")
+        if len(subject.strip()) < 3:
+            errors.append("Subject must be at least 3 characters.")
         if len(message.strip()) < 10:
             errors.append("Message must be at least 10 characters.")
 
